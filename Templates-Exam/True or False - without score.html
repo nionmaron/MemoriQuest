@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quiz Verdadeiro ou Falso</title>
+    <meta charset="UTF-8">
+    <script>
+      function gerarResumo() {
+        var nome = document.getElementById("nome").value;
+        var email = document.getElementById("email").value;
+        var resp1 = document.querySelector('input[name="resp1"]:checked').value;
+        var resp2 = document.querySelector('input[name="resp2"]:checked').value;
+        var resp3 = document.querySelector('input[name="resp3"]:checked').value;
+        var resumo = nome + " || " + resp1 + ", " + resp2 + ", " + resp3;
+        document.getElementById("resumo").innerHTML = resumo;
+        document.getElementById("gerar-resumo").style.backgroundColor = "green";
+      }
+      function copiarResumo() {
+        var resumo = document.getElementById("resumo");
+        var range = document.createRange();
+        range.selectNode(resumo);
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        alert("Resumo copiado para a área de transferência!");
+      }
+      function resetarFormulario() {
+        document.getElementById("quiz-form").reset();
+        document.getElementById("resumo").innerHTML = "";
+        document.getElementById("gerar-resumo").style.backgroundColor = "";
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Quiz Verdadeiro ou Falso</h1>
+    <form id="quiz-form">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
+      <br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <p>1. O Sol é um planeta.</p>
+      <label><input type="radio" name="resp1" value="Verdadeiro" required> Verdadeiro</label>
+      <label><input type="radio" name="resp1" value="Falso"> Falso</label>
+      <br>
+      <p>2. O Brasil é um país da América do Norte.</p>
+      <label><input type="radio" name="resp2" value="Verdadeiro"> Verdadeiro</label>
+      <label><input type="radio" name="resp2" value="Falso" required> Falso</label>
+      <br>
+      <p>3. A Lua é maior do que a Terra.</p>
+      <label><input type="radio" name="resp3" value="Verdadeiro"> Verdadeiro</label>
+      <label><input type="radio" name="resp3" value="Falso" required> Falso</label>
+      <br>
+      <button type="button" id="gerar-resumo" onclick="gerarResumo()">Gerar Resumo</button>
+      <button type="button" onclick="copiarResumo()">Copiar Resumo</button>
+      <button type="button" onclick="resetarFormulario()">Resetar</button>
+      <p id="resumo"></p>
+    </form>
+  </body>
+</html>

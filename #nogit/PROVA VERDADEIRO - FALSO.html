@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Prova de Verdadeiro ou Falso</title>
+  <style>
+    /* Adicione seus estilos aqui */
+    body {
+    background: linear-gradient(to bottom, #4b6cb7, #182848);
+    }
+    .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    }
+
+    .question-container {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+  }
+
+  .question-container p {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .question-container label {
+    display: block;
+    margin-top: 10px;
+  }
+
+    button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prova de Verdadeiro ou Falso ni</h1>
+    <form id="quiz">
+      <!-- As questões serão inseridas aqui pelo JavaScript -->
+    </form>
+    <button onclick="submitQuiz()">Enviar Prova</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    var cards = [
+      { question: "Qual é a capital do Brasil?", answer: "Brasília" , isTrue: true, explanation: "A capital do Bras" },
+      { question: "Quem descobriu o Brasil?", answer: "Pedro Álvares Cabral" , isTrue: true, explanation: "A capital do Bras" },
+      { question: "Qual é o maior planeta do sistema solar?", answer: "Júpiter" , isTrue: true, explanation: "A capital do Bras" },
+      { question: "Quem escreveu o livro 'Dom Quixote'?", answer: "Miguel de Cervantes" , isTrue: false, explanation: "A capital do Bras" },
+      { question: "Qual é o maior país da América do Sul?", answer: "Brasil" , isTrue: true, explanation: "A capital do Bras" }
+     ];
+
+
+    var selectedCards = [];
+    while (selectedCards.length < 5) {
+      var randomIndex = Math.floor(Math.random() * cards.length);
+      if (!selectedCards.includes(randomIndex)) {
+        selectedCards.push(randomIndex);
+      }
+    }
+
+    var quiz = document.getElementById("quiz");
+    selectedCards.forEach(function (index) {
+      var card = cards[index];
+      var questionDiv = document.createElement("div");
+      questionDiv.innerHTML = `
+        <p>${card.question}</p>
+        <label>
+          <input type="radio" name="q${index}" value="true"> Verdadeiro
+        </label>
+        <label>
+          <input type="radio" name="q${index}" value="false"> Falso
+        </label>
+      `;
+      quiz.appendChild(questionDiv);
+    });
+
+  function submitQuiz() {
+      var score = 0;
+      selectedCards.forEach(function (index) {
+        var card = cards[index];
+        var userAnswer = document.querySelector(`input[name="q${index}"]:checked`).value;
+        if ((userAnswer === "true" && card.isTrue) || (userAnswer === "false" && !card.isTrue)) {
+          score++;
+        }
+      });
+
+      var result = document.getElementById("result");
+      result.innerHTML = `Você acertou ${score} de 5 questões.`;
+    }
+  </script>
+</body>

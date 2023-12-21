@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Prova de Verdadeiro ou Falso</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #e6e9f0, #eef1f5);
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      overflow: hidden;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+      
+    /* Estilos para o container de cada pergunta */
+.question-container {
+  background-color: #ffffff; /* Cor de fundo branca para contraste */
+  border-radius: 10px; /* Bordas arredondadas */
+  padding: 20px; /* Espaçamento interno */
+  margin-bottom: 20px; /* Espaçamento entre as perguntas */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para profundidade */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave para interação */
+}
+
+/* Estilização quando o mouse passa sobre a pergunta */
+.question-container:hover {
+  transform: translateY(-5px); /* Movimenta a pergunta um pouco para cima */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Sombra maior para efeito de elevação */
+}
+
+.question-container p {
+  /* Outros estilos permanecem os mesmos */
+}
+
+.question-container label {
+  display: flex; /* Utiliza Flexbox para alinhamento */
+  align-items: center; /* Centraliza verticalmente */
+  margin: 5px 0; /* Espaçamento entre as opções */
+}
+
+    .button-group {
+      text-align: center;
+      margin-top: 20px;
+    }
+    button {
+      width: 48%;
+      margin: 10px 1%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prova de Verdadeiro ou Falso</h1>
+    <form id="quiz">
+      <!-- As questões serão inseridas aqui pelo JavaScript -->
+    </form>
+    <div class="button-group">
+      <button onclick="submitQuiz()">Enviar Prova</button>
+      <button onclick="resetQuiz()">Resetar</button>
+    </div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Dados do quiz
+    var cards = [
+      { question: "Qual é a capital do Brasil?", answer: "Brasília" , isTrue: true },
+      { question: "Quem descobriu o Brasil?", answer: "Pedro Álvares Cabral" , isTrue: true },
+      { question: "Qual é o maior planeta do sistema solar?", answer: "Júpiter" , isTrue: true },
+      { question: "Quem escreveu o livro 'Dom Quixote'?", answer: "Miguel de Cervantes" , isTrue: false },
+      { question: "Qual é o maior país da América do Sul?", answer: "Brasil" , isTrue: true }
+    ];
+
+    // Função para embaralhar as questões
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Função para criar a estrutura de cada pergunta
+    function createQuestionElement(card, index) {
+      var questionDiv = document.createElement("div");
+      questionDiv.className = 'question-container';
+      questionDiv.innerHTML = `
+        <p>${card.question}</p>
+        <label>
+          <input type="radio" name="q${index}" value="true"> Verdadeiro
+        </label>
+        <label>
+          <input type="radio" name="q${index}" value="false"> Falso
+        </label>
+      `;
+      return questionDiv;
+    }
+
+    function buildQuiz() {
+      var quiz = document.getElementById("quiz");
+      quiz.innerHTML = '';
+      shuffle(cards); // Embaralha as questões
+      cards.forEach(function (card, index) {
+        var questionElement = createQuestionElement(card, index);
+        quiz.appendChild(questionElement);
+      });
+    }
+
+    function submitQuiz() {
+  var score = 0;
+  var allAnswered = true;
+
+  // Primeiro, verifica se todas as perguntas foram respondidas
+  cards.forEach(function (card, index) {
+    var userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+    if (!userAnswer) {
+      allAnswered = false; // Se alguma pergunta não foi respondida, marca como falso
+    }
+  });
+
+  // Se todas as perguntas foram respondidas, prossegue com a correção e exibição dos indicadores
+  if (allAnswered) {
+    cards.forEach(function (card, index) {
+      var userAnswer = document.querySelector(`input[name="q${index}"]:checked`).value;
+      var questionDiv = document.querySelector(`.question-container:nth-child(${index + 1})`);
+      var correct = (userAnswer === "true" && card.isTrue) || (userAnswer === "false" && !card.isTrue);
+
+      // Cria o elemento indicador
+      var indicator = document.createElement('span');
+      if (correct) {
+        score++;
+        indicator.innerHTML = ` ✅`;
+      } else {
+        indicator.innerHTML = ` ❌`;
+      }
+      questionDiv.appendChild(indicator); // Adiciona o indicador
+    });
+
+    // Exibe o resultado
+    var result = document.getElementById("result");
+    result.innerHTML = `Você acertou ${score} de ${cards.length} questões.`;
+    document.querySelector('.button-group button').disabled = true; // Desabilita o botão após a submissão
+  } else {
+    // Se nem todas as perguntas foram respondidas, alerta o usuário
+    alert("Por favor, responda a todas as perguntas antes de submeter a prova.");
+  }
+}
+
+    function resetQuiz() {
+      document.getElementById('quiz').innerHTML = '';
+      document.getElementById('result').innerHTML = '';
+      document.querySelector('.button-group button').disabled = false;
+      buildQuiz();  // Reconstrói o quiz
+    }
+
+
+    // Inicializa o quiz quando a página é carregada
+    buildQuiz();
+  </script>
+</body>
+</html>
