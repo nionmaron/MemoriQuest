@@ -20,14 +20,12 @@ These templates are intended for personal use to aid in memorization and learnin
 3.  Run the R script to generate your interactive flashcards.
 4.  Open the resulting HTML file in a browser to view and interact with your flashcards.
 
-### Preview of Interactive Flashcards
-
-To give you a better idea of what the interactive flashcards look like, below is a GIF showing the end result. This demonstrates how users can interact with the flashcards, flipping them to reveal questions and answers, and the smooth, engaging user experience.
-
-![Interactive Flashcards Preview]("Questions.gif")
-
 ## Contributing
 
 Contributions are welcome! If you have suggestions, improvements, or new template ideas, please feel free to fork this repository, make your changes, and submit a pull request. We're particularly interested in additional scripts or tools that make creating personal study materials easier and more efficient.
 
-*Thank you for using the Personal Study Templates, and happy studying!*
+<br> *Thank you for using the Personal Study Templates, and happy studying!* <br>
+
+## Preview of Interactive Flashcards
+
+To give you a better idea of what the interactive flashcards look like, below is a GIF showing the end result. This demonstrates how users can interact with the flashcards, flipping them to reveal questions and answers, and the smooth, engaging user experience. <br> ![Interactive Flashcards Preview](Templates-FlashCard/Template%2003%20Questions%20With%20Explanation%20pt-BR.gif) <br> <br>
