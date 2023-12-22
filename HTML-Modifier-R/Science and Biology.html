@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Flash Cards nion</title>
+  <style>
+    
+    /* Estilos Padrões (Desktop) */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+
+.spacer {
+  height: 20px; /* Ajuste a altura para aumentar ou diminuir o espaço */
+}
+
+.container {
+  margin-top: 0 auto; /* Margem superior de 500px */
+  width: 760px; /* Largura fixa do container */
+  margin-left: auto; /* Margem esquerda automática para centralizar */
+  margin-right: auto; /* Margem direita automática para centralizar */
+  padding: 20px; /* Padding interno */
+  background-color: #fff; /* Cor de fundo */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Sombra do box */
+}
+
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  padding: 8px 16px; /* Diminuído de 10px 20px para 8px 16px */
+  font-size: 10px; /* Diminuído de 16px para 14px */
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1 1 auto; /* Permite que o botão cresça e ocupe espaço igual */
+  margin: 5px; /* Espaçamento entre os botões */
+}
+
+.big-button {
+  font-size: 20px; /* Tamanho maior para botões grandes */
+}
+
+.small-button {
+  font-size: 16px; /* Tamanho menor para botões pequenos */
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background-color: #fff;
+  text-align: center;
+}
+
+.question-style {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.answer-style {
+  font-size: 18px; /* Tamanho confortável para leitura */
+  color: #333; /* Cor mais escura para melhor contraste */
+  line-height: 1.6; /* Espaçamento entre as linhas para melhorar a leitura */
+  text-align: justify; /* Alinha o texto justificado para um fluxo uniforme */
+  padding: 10px; /* Espaço ao redor do texto */
+  border-radius: 5px; /* Bordas suavemente arredondadas para o bloco de texto */
+  background-color: #f9f9f9; /* Cor de fundo sutil para destacar a área de resposta */
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.1); /* Sombra sutil para profundidade */
+  margin-top: 20px; /* Mantém uma distância entre a pergunta e a resposta */
+}
+
+h1 {
+  margin-top: 0;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+/* Espaçamento entre botões */
+button:not(:last-child) {
+    margin-bottom: 10px; /* Ajusta o espaçamento entre os botões */
+  }
+
+  
+/* Estilos para Tablets */
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+  }
+
+  .card {
+    padding: 25px;
+  }
+
+  .question-style {
+    font-size: 28px;
+  }
+
+  .answer-style {
+    font-size: 18px;
+  }
+
+  button {
+    padding: 18px 26px;
+    font-size: 24px;
+  }
+}
+
+/* Estilos para Celulares */
+@media screen and (max-width: 480px) {
+  .container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .question-style {
+    font-size: 18px;
+  }
+
+  .answer-style {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+    
+  </style>
+</head>
+<body>
+  <div class="spacer"></div>
+  <div class="container">
+    <h1>Science and Biology</h1>
+    <div class="card" id="card">
+      <div class="buttons-container">
+        <button onclick="nextCard()">Próxima Pergunta</button>
+      </div>
+      
+      <p id="question" class="question-style">Pergunta</p>
+      <p id="answer" class="answer-style">Resposta</p>
+    </div>
+    <div class="buttons-container">
+      <button class="small-button" id="answerButton" onclick="showAnswer()">Mostrar Resposta</button>
+      <button class="small-button" onclick="shuffleCards()">Embaralhar Perguntas</button>
+    </div>
+    
+  </div>
+  <div class="spacer"></div>
+
+  <script>
+  
+   var cards = [{question:"What is the basic unit of life present in all living organisms ?",answer:"Cell"},
+     {question:"What is the process called by which plants convert carbon dioxide into oxygen?",answer:"Photosynthesis"},
+     {question:"What is the name of the nucleic acid that contains the genetic instructions used in the development and functioning of all living organisms?",answer:"DNA (Deoxyribonucleic Acid)"},
+     {question:"Which human body organ is responsible for filtering and cleaning the blood?",answer:"Kidneys"},
+     {question:"How do antibodies help in protecting the body against diseases?",answer:"Antibodies identify and neutralize pathogens such as bacteria and viruses"},
+     {question:"What is the role of enzymes in biological reactions?",answer:"Enzymes speed up chemical reactions in the body by lowering activation energy"}]; 
+    
+
+    var currentCard = 0;
+
+    document.getElementById("answer").style.display = "none";
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function nextCard() {
+        // Mostra a próxima pergunta e resposta
+        document.getElementById("answer").style.display = "none"; // Esconde a resposta ao avançar para o próximo card
+
+        // Esconde a resposta e reset o texto do botão para 'Mostrar Resposta'
+        document.getElementById("answer").style.display = "none";
+        document.getElementById("answerButton").textContent = "Mostrar Resposta";
+        
+        // Incrementa o índice do card atual e verifica se alcançou o fim do array
+        currentCard++;
+        if (currentCard >= cards.length) {
+            // Se sim, embaralha os cards e reinicia o índice
+            shuffle(cards);
+            currentCard = 0;
+        }
+
+        // Atualiza o conteúdo da pergunta e resposta com o novo card
+        document.getElementById("question").innerHTML = cards[currentCard].question;
+        document.getElementById("answer").innerHTML = cards[currentCard].answer;
+
+        // Ajusta o alinhamento do texto com base no comprimento da resposta
+        if (cards[currentCard].answer.length > 20) {
+            document.getElementById("answer").style.textAlign = "justify";
+        } else {
+            document.getElementById("answer").style.textAlign = "center";
+        }
+
+        // Verifica se é o fim do array para mostrar uma mensagem final
+        if (currentCard === cards.length - 1) {
+            document.getElementById("question").innerHTML += " (Última pergunta!)";
+        }
+     }
+
+     function showAnswer() {
+    var answer = document.getElementById("answer");
+    var answerButton = document.getElementById("answerButton");
+
+    if (answer.style.display === "none") {
+        // Se a resposta estiver escondida, mostre-a e mude o texto do botão
+        answer.style.display = "block";
+        answerButton.textContent = "Esconder Resposta";
+    } else {
+        // Se a resposta estiver sendo mostrada, esconda-a e mude o texto do botão
+        answer.style.display = "none";
+        answerButton.textContent = "Mostrar Resposta";
+    }
+}
+
+
+    function shuffleCards() {
+      shuffle(cards);
+      currentCard = 0;
+      nextCard(); // após embaralhar, mostrar o primeiro card
+    }
+
+  </script>
+</body>
+</html>
