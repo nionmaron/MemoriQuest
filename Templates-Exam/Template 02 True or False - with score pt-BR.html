@@ -15,6 +15,7 @@
       margin: 0;
     }
     .container {
+      position: relative; /* Posicionamento relativo para elementos internos absolutos */
       width: 90%;
       max-width: 600px;
       background-color: #fff;
@@ -23,23 +24,54 @@
       padding: 20px;
       overflow: hidden;
     }
+
+    
     h1 {
       text-align: center;
       color: #333;
     }
       
+    /* Estilos para o container de cada pergunta */
+    .question-container {
+      background-color: #ffffff; /* Cor de fundo branca para contraste */
+      border-radius: 10px; /* Bordas arredondadas */
+      padding: 20px; /* Espaçamento interno */
+      margin-bottom: 20px; /* Espaçamento entre as perguntas */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para profundidade */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave para interação */
+    }
+
+    /* Estilização quando o mouse passa sobre a pergunta */
+    .question-container:hover {
+      transform: translateY(-5px); /* Movimenta a pergunta um pouco para cima */
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Sombra maior para efeito de elevação */
+    }
+
     .question-container p {
-      margin-top: 0;
-      font-weight: bold;
+      /* Outros estilos permanecem os mesmos */
     }
+
     .question-container label {
-      display: block;
-      margin: 5px 0;
+      display: flex; /* Utiliza Flexbox para alinhamento */
+      align-items: center; /* Centraliza verticalmente */
+      margin: 5px 0; /* Espaçamento entre as opções */
     }
+
     .button-group {
       text-align: center;
       margin-top: 20px;
     }
+
+    .watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
     button {
       width: 48%;
       margin: 10px 1%;
@@ -52,14 +84,17 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #45a049;
     }
+
     #result {
       text-align: center;
       font-size: 20px;
       margin-top: 20px;
     }
+
   </style>
 </head>
 <body>
@@ -73,17 +108,18 @@
       <button onclick="resetQuiz()">Resetar</button>
     </div>
     <div id="result"></div>
+    <div class="watermark">Nion M. Dransfeld</div>
   </div>
 
   <script>
     // Dados do quiz
     var cards = [
-      { question: "Qual é a capital do Brasil?", answer: "Brasília" , isTrue: true },
-      { question: "Quem descobriu o Brasil?", answer: "Pedro Álvares Cabral" , isTrue: true },
-      { question: "Qual é o maior planeta do sistema solar?", answer: "Júpiter" , isTrue: true },
-      { question: "Quem escreveu o livro 'Dom Quixote'?", answer: "Miguel de Cervantes" , isTrue: false },
-      { question: "Qual é o maior país da América do Sul?", answer: "Brasil" , isTrue: true }
+      { question: "O juro simples é calculado apenas sobre o valor principal ao longo do tempo?", answer: "Verdadeiro", isTrue: true },
+      { question: "A fórmula para calcular juros compostos é a mesma que para juros simples?", answer: "Falso", isTrue: false },
+      { question: "Os juros nominais representam a taxa real de retorno de um investimento?", answer: "Falso", isTrue: false },
+      { question: "Em um regime de juros compostos, o montante final é sempre maior que no regime de juros simples para o mesmo período e taxa?", answer: "Verdadeiro", isTrue: true },
     ];
+
 
     // Função para embaralhar as questões
     function shuffle(array) {
@@ -142,9 +178,9 @@
       var indicator = document.createElement('span');
       if (correct) {
         score++;
-        indicator.innerHTML = ` ✅`;
+        indicator.innerHTML = ` ✅ Resposta Certa`;
       } else {
-        indicator.innerHTML = ` ❌`;
+        indicator.innerHTML = ` ❌ Resposta Errada`;
       }
       questionDiv.appendChild(indicator); // Adiciona o indicador
     });
@@ -158,7 +194,7 @@
     alert("Por favor, responda a todas as perguntas antes de submeter a prova.");
   }
 }
- 
+
     function resetQuiz() {
       document.getElementById('quiz').innerHTML = '';
       document.getElementById('result').innerHTML = '';

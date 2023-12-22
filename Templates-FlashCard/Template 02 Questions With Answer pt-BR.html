@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flashcards para Memorização</title>
+    <style>
+   #flashcard-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.flashcard {
+    background-color: #f7f7f7; /* Cor de fundo mais suave */
+    padding: 20px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    position: relative;
+    width: calc(100% - 40px);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Sombra suave para profundidade */
+    border-radius: 10px; /* Bordas arredondadas */
+}
+
+/* Nome pequeno do flashcard na lateral esquerda */
+.flashcard:before {
+    content: attr(data-name); /* Usa o atributo data-name para o texto */
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 12px;
+    color: black;
+    writing-mode: vertical-lr; /* Texto vertical */
+    transform: rotate(180deg); /* Corrige a orientação do texto */
+}
+.flashcard h2 {
+    font-size: 18px; /* Tamanho menor para as perguntas */
+    color: #333; /* Cor mais escura para melhor leitura */
+    margin: 0 0 10px 0; /* Ajuste na margem */
+}
+
+.flashcard p {
+    font-size: 16px; /* Tamanho menor para as respostas */
+    color: #555; /* Cor suave para as respostas */
+}
+
+.flashcard.flipped {
+    background-color: #defede; /* Fundo verde mais suave quando virado */
+}
+/* Estilo para a parte de trás do flashcard */
+.flashcard .back {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+/* Quando o flashcard é virado */
+.flashcard.flipped {
+    background-color: lightgreen; /* Fundo verde quando virado */
+}
+
+.flashcard.flipped .front {
+    display: none;
+}
+
+.flashcard.flipped .back {
+    display: flex;
+}
+
+/* Media Query para telas maiores que 800px */
+@media (min-width: 801px) {
+    .flashcard {
+        width: calc(50% - 40px); /* 50% da largura do contêiner para 2 por linha */
+    }
+}
+
+
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard .front, .flashcard .back {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .flashcard .back {
+            display: none;
+        }
+
+        .flashcard.flipped .front {
+            display: none;
+        }
+
+        .flashcard.flipped .back {
+            display: flex;
+        }
+
+        .flashcard h2 {
+            margin-top: 0;
+        }
+
+        .flashcard p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body onload="init()">
+
+<div id="flashcard-container">
+    <!-- Flashcards serão inseridos aqui pelo JavaScript -->
+</div>
+
+<script>
+    function flipCard(card) {
+        card.classList.toggle("flipped");
+    }
+
+    function shuffle() {
+        const container = document.getElementById("flashcard-container");
+        for (let i = container.children.length; i >= 0; i--) {
+            container.appendChild(container.children[Math.random() * i | 0]);
+        }
+    }
+
+    function createFlashcards(questions) {
+    const container = document.getElementById('flashcard-container');
+    questions.forEach((item, index) => {
+        container.innerHTML += `
+        <div class="flashcard" onclick="flipCard(this)" data-name="Card ${index + 1}">
+            <div class="front">
+                <h2>${item.question}</h2>
+            </div>
+            <div class="back">
+                <h2>Resposta:</h2>
+                <p>${item.answer}</p>
+            </div>
+        </div>`;
+    });
+}
+
+
+    function init() {
+        // Dados embutidos diretamente no script
+        const questions = [
+    {"question": "Se você divide 120 por 4 e depois soma 15, qual é o resultado?", "answer": "45"},
+    {"question": "Qual é a raiz quadrada de 196?", "answer": "14"},
+    {"question": "Se você tem uma sequência de números onde cada número é a soma dos dois anteriores, começando com 1 e 1, qual é o 6º número (sequência de Fibonacci)?", "answer": "8"},
+    {"question": "Qual é o resultado de (8^2) ÷ 4 + 15?", "answer": "47"},
+    {"question": "Se você investir R$1000 a uma taxa de juros compostos de 5% ao ano, quanto terá após 5 anos?", "answer": "R$1276,28"}
+    ]
+    ;
+        createFlashcards(questions);
+        shuffle();
+    }
+</script>
+</body>
+</html>
+

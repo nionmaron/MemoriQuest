@@ -28,32 +28,14 @@
       color: #333;
     }
       
-    /* Estilos para o container de cada pergunta */
-.question-container {
-  background-color: #ffffff; /* Cor de fundo branca para contraste */
-  border-radius: 10px; /* Bordas arredondadas */
-  padding: 20px; /* Espaçamento interno */
-  margin-bottom: 20px; /* Espaçamento entre as perguntas */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para profundidade */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave para interação */
-}
-
-/* Estilização quando o mouse passa sobre a pergunta */
-.question-container:hover {
-  transform: translateY(-5px); /* Movimenta a pergunta um pouco para cima */
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Sombra maior para efeito de elevação */
-}
-
-.question-container p {
-  /* Outros estilos permanecem os mesmos */
-}
-
-.question-container label {
-  display: flex; /* Utiliza Flexbox para alinhamento */
-  align-items: center; /* Centraliza verticalmente */
-  margin: 5px 0; /* Espaçamento entre as opções */
-}
-
+    .question-container p {
+      margin-top: 0;
+      font-weight: bold;
+    }
+    .question-container label {
+      display: block;
+      margin: 5px 0;
+    }
     .button-group {
       text-align: center;
       margin-top: 20px;
@@ -96,12 +78,14 @@
   <script>
     // Dados do quiz
     var cards = [
-      { question: "Qual é a capital do Brasil?", answer: "Brasília" , isTrue: true },
-      { question: "Quem descobriu o Brasil?", answer: "Pedro Álvares Cabral" , isTrue: true },
-      { question: "Qual é o maior planeta do sistema solar?", answer: "Júpiter" , isTrue: true },
-      { question: "Quem escreveu o livro 'Dom Quixote'?", answer: "Miguel de Cervantes" , isTrue: false },
-      { question: "Qual é o maior país da América do Sul?", answer: "Brasil" , isTrue: true }
+      { question: "O juro simples é calculado apenas sobre o valor principal ao longo do tempo?", answer: "Verdadeiro", isTrue: true },
+      { question: "A fórmula para calcular juros compostos é a mesma que para juros simples?", answer: "Falso", isTrue: false },
+      { question: "Os juros nominais representam a taxa real de retorno de um investimento?", answer: "Falso", isTrue: false },
+      { question: "Em um regime de juros compostos, o montante final é sempre maior que no regime de juros simples para o mesmo período e taxa?", answer: "Verdadeiro", isTrue: true },
+      { question: "Pode-se considerar juros simples como mais vantajoso para empréstimos de longo prazo?", answer: "Falso", isTrue: false },
+      { question: "A taxa nominal é ajustada pela inflação para refletir o custo real do dinheiro ao longo do tempo?", answer: "Verdadeiro", isTrue: true }
     ];
+
 
     // Função para embaralhar as questões
     function shuffle(array) {
@@ -160,9 +144,9 @@
       var indicator = document.createElement('span');
       if (correct) {
         score++;
-        indicator.innerHTML = ` ✅`;
+        indicator.innerHTML = ` ✅ Resposta Certa`;
       } else {
-        indicator.innerHTML = ` ❌`;
+        indicator.innerHTML = ` ❌ Resposta Errada`;
       }
       questionDiv.appendChild(indicator); // Adiciona o indicador
     });
@@ -176,7 +160,7 @@
     alert("Por favor, responda a todas as perguntas antes de submeter a prova.");
   }
 }
-
+ 
     function resetQuiz() {
       document.getElementById('quiz').innerHTML = '';
       document.getElementById('result').innerHTML = '';

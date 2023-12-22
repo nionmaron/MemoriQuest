@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Flash Cards nion</title>
+  <style>
+    
+    /* Estilos Padrões (Desktop) */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+button {
+  padding: 8px 16px; /* Diminuído de 10px 20px para 8px 16px */
+  font-size: 10px; /* Diminuído de 16px para 14px */
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1 1 auto; /* Permite que o botão cresça e ocupe espaço igual */
+  margin: 5px; /* Espaçamento entre os botões */
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background-color: #fff;
+  text-align: center;
+}
+
+.question-style {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.answer-style {
+  font-size: 18px; /* Tamanho confortável para leitura */
+  color: #333; /* Cor mais escura para melhor contraste */
+  line-height: 1.6; /* Espaçamento entre as linhas para melhorar a leitura */
+  text-align: justify; /* Alinha o texto justificado para um fluxo uniforme */
+  padding: 10px; /* Espaço ao redor do texto */
+  border-radius: 5px; /* Bordas suavemente arredondadas para o bloco de texto */
+  background-color: #f9f9f9; /* Cor de fundo sutil para destacar a área de resposta */
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.1); /* Sombra sutil para profundidade */
+  margin-top: 20px; /* Mantém uma distância entre a pergunta e a resposta */
+}
+
+h1 {
+  margin-top: 0;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+/* Espaçamento entre botões */
+button:not(:last-child) {
+    margin-bottom: 10px; /* Ajusta o espaçamento entre os botões */
+  }
+
+  
+/* Estilos para Tablets */
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+  }
+
+  .card {
+    padding: 25px;
+  }
+
+  .question-style {
+    font-size: 30px;
+  }
+
+  .answer-style {
+    font-size: 26px;
+  }
+
+  button {
+    padding: 18px 26px;
+    font-size: 24px;
+  }
+}
+
+/* Estilos para Celulares */
+@media screen and (max-width: 480px) {
+  .container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .question-style {
+    font-size: 18px;
+  }
+
+  .answer-style {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Flash Cards</h1>
+    <div class="card" id="card">
+      <p id="question" class="question-style">Pergunta</p>
+      <p id="answer" class="answer-style">Resposta</p>
+    </div>
+    <button onclick="nextCard()">Próxima Pergunta</button>
+    <button onclick="showAnswer()">Mostrar Resposta</button>
+    <button onclick="shuffleCards()">Embaralhar Perguntas</button>
+  </div>
+
+  <script>
+    var cards = [
+    {"question": "Qual é a unidade básica da vida, presente em todos os organismos vivos?", "answer": "Célula"},
+    {"question": "Como é chamado o processo pelo qual as plantas convertem dióxido de carbono em oxigênio?", "answer": "Fotossíntese"},
+    {"question": "Qual é o nome do ácido nucleico que contém as instruções genéticas usadas no desenvolvimento e funcionamento de todos os organismos vivos?", "answer": "DNA (Ácido Desoxirribonucleico)"},
+    {"question": "Qual órgão do corpo humano é responsável pela filtragem e limpeza do sangue?", "answer": "Rins"},
+    {"question": "O que é mitose e em que tipo de célula ocorre?", "answer": "Mitose é um processo de divisão celular que resulta em duas células filhas geneticamente idênticas à célula mãe, ocorrendo em células somáticas"}
+]
+
+
+    var currentCard = 0;
+
+    document.getElementById("answer").style.display = "none";
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function nextCard() {
+        // Mostra a próxima pergunta e resposta
+        document.getElementById("answer").style.display = "none"; // Esconde a resposta ao avançar para o próximo card
+
+        // Incrementa o índice do card atual e verifica se alcançou o fim do array
+        currentCard++;
+        if (currentCard >= cards.length) {
+            // Se sim, embaralha os cards e reinicia o índice
+            shuffle(cards);
+            currentCard = 0;
+        }
+
+        // Atualiza o conteúdo da pergunta e resposta com o novo card
+        document.getElementById("question").innerHTML = cards[currentCard].question;
+        document.getElementById("answer").innerHTML = cards[currentCard].answer;
+
+        // Ajusta o alinhamento do texto com base no comprimento da resposta
+        if (cards[currentCard].answer.length > 20) {
+            document.getElementById("answer").style.textAlign = "justify";
+        } else {
+            document.getElementById("answer").style.textAlign = "center";
+        }
+
+        // Verifica se é o fim do array para mostrar uma mensagem final
+        if (currentCard === cards.length - 1) {
+            document.getElementById("question").innerHTML += " (Última pergunta!)";
+        }
+     }
+
+    function showAnswer() {
+        document.getElementById("answer").style.display = "block";
+    }
+
+    function shuffleCards() {
+      shuffle(cards);
+      currentCard = 0;
+      nextCard(); // após embaralhar, mostrar o primeiro card
+    }
+
+  </script>
+</body>
+</html>
