@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flash Cards nion</title>
   <style>
     
@@ -15,6 +16,16 @@ body {
   padding: 0;
   background-color: #f1f1f1;
 }
+
+    /* Estilos para a marca d'água */
+    .watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: grey;
+      z-index: 1000;
+    }
 
 .spacer {
   height: 20px; /* Ajuste a altura para aumentar ou diminuir o espaço */
@@ -108,19 +119,19 @@ button:not(:last-child) {
     margin-bottom: 10px; /* Ajusta o espaçamento entre os botões */
   }
 
-  
-/* Estilos para Tablets */
-@media screen and (min-width: 481px) and (max-width: 1024px) {
+ /* Estilos para dispositivos móveis (telas menores que 768px) */
+@media screen and (max-width: 768px) {
   .container {
-    max-width: 90%;
+        max-width: 96%; /* Faz o container ocupar 100% da largura */
+        padding: 10px; /* Ajusta o padding para dispositivos móveis */
   }
 
   .card {
-    padding: 25px;
+    padding: 20px;
   }
 
   .question-style {
-    font-size: 28px;
+    font-size: 20px;
   }
 
   .answer-style {
@@ -128,37 +139,12 @@ button:not(:last-child) {
   }
 
   button {
-    padding: 18px 26px;
-    font-size: 24px;
-  }
-}
-
-/* Estilos para Celulares */
-@media screen and (max-width: 480px) {
-  .container {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  .card {
-    padding: 10px;
-  }
-
-  .question-style {
+    padding: 16px 18px;
     font-size: 18px;
   }
-
-  .answer-style {
-    font-size: 14px;
-  }
-
-  button {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
 }
 
-    
+
   </style>
 </head>
 <body>
@@ -170,8 +156,8 @@ button:not(:last-child) {
         <button onclick="nextCard()">Próxima Pergunta</button>
       </div>
       
-      <p id="question" class="question-style">Pergunta</p>
-      <p id="answer" class="answer-style">Resposta</p>
+      <p id="question" class="question-style">Seja Bem Vindo <br> <br> <small>Use setas para navegar, duplo clique revela resposta, ou clique nos botões.</small></p>
+      <p id="answer" class="answer-style">Clique em próxima pergunta para iniciar.</p>
     </div>
     <div class="buttons-container">
       <button class="small-button" id="answerButton" onclick="showAnswer()">Mostrar Resposta</button>
@@ -180,6 +166,12 @@ button:not(:last-child) {
     
   </div>
   <div class="spacer"></div>
+
+<!-- Marca d'água -->
+<div class="watermark">
+  Visite <a href="https://www.nionmaron.com" target="_blank">nionmaron.com</a>
+</div>
+
 
   <script>
   
@@ -251,6 +243,65 @@ button:not(:last-child) {
       currentCard = 0;
       nextCard(); // após embaralhar, mostrar o primeiro card
     }
+
+    // Funções para detecção de gestos de deslizar e teclado
+    var xDown = null;                                                        
+    var yDown = null;
+
+    function handleTouchStart(evt) {
+        const firstTouch = evt.touches[0];                                      
+        xDown = firstTouch.clientX;                                      
+        yDown = firstTouch.clientY;                                      
+    };                                                
+
+    function handleTouchMove(evt) {
+        if (!xDown || !yDown) {
+            return;
+        }
+
+        var xUp = evt.touches[0].clientX;                                    
+        var yUp = evt.touches[0].clientY;
+
+        var xDiff = xDown - xUp;
+        var yDiff = yDown - yUp;
+
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
+            if (xDiff > 0) {
+                /* left swipe */ 
+                nextCard();
+            } else {
+                /* right swipe */
+                previousCard();
+            }                       
+        } 
+        /* reset values */
+        xDown = null;
+        yDown = null;                                             
+    };
+
+    function handleKeyDown(evt) {
+      if (evt.key === "ArrowLeft") {
+          previousCard();
+      } else if (evt.key === "ArrowRight") {
+          nextCard();
+      } else if (evt.key === "ArrowDown") {
+        showAnswer();
+      }
+    }
+
+
+    function handleDoubleClick() {
+        showAnswer();
+    }
+
+    
+
+    var cardElement = document.getElementById('card');
+    cardElement.addEventListener('touchstart', handleTouchStart, false);        
+    cardElement.addEventListener('touchmove', handleTouchMove, false);
+    cardElement.addEventListener('dblclick', handleDoubleClick, false);
+
+    document.addEventListener('keydown', handleKeyDown);
 
   </script>
 </body>

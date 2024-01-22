@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    background-color: #333; /* Dark background */
+    color: white; /* Light text */
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .flexcard {
+    background-color: #222; /* Darker card background */
+    border-radius: 16px; /* Rounded corners, increased from 8px */
+    padding: 30px; /* Increased padding for a larger card */
+    margin-bottom: 30px; /* More space between cards */
+    position: relative; /* For absolute positioning of triangle */
+    overflow: hidden; /* Ensures the triangle doesn't overflow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Added depth with shadow */
+  }
+
+  .flexcard:before, .flexcard:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  .flexcard:before { /* Triangle on the left */
+    left: -30px; /* Increased size */
+    border-width: 30px 30px 30px 0; /* Adjusted size */
+    border-color: transparent #222 transparent transparent;
+  }
+
+  .flexcard:after { /* Triangle on the right */
+    right: -30px; /* Increased size */
+    border-width: 30px 0 30px 30px; /* Adjusted size */
+    border-color: transparent transparent transparent #222;
+  }
+
+  .question-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #FFF; /* White circle */
+    color: #333; /* Dark text for number */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6); /* Increased depth with shadow */
+    margin-right: 15px; /* Adjusted margin */
+    float: left; /* Align with the question */
+  }
+
+  .question {
+    font-size: 20px; /* Slightly larger font for the question */
+    font-weight: bold;
+    cursor: pointer; /* Indicate it's clickable */
+  }
+
+  .answer {
+    display: none;
+    padding-top: 10px;
+    font-size: 16px; /* Adjusted font size for the answer */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="flexcard">
+    <div class="question-circle">1</div>
+    <div class="question">Clique aqui para a primeira pergunta</div>
+    <div class="answer">Aqui está a resposta para a primeira pergunta.</div>
+  </div>
+
+  <div class="flexcard">
+    <div class="question-circle">2</div>
+    <div class="question">Clique aqui para a segunda pergunta</div>
+    <div class="answer">Aqui está a resposta para a segunda pergunta.</div>
+  </div>
+
+  <div class="flexcard">
+    <div class="question-circle">3</div>
+    <div class="question">Clique aqui para a terceira pergunta</div>
+    <div class="answer">Aqui está a resposta para a terceira pergunta.</div>
+  </div>
+</div>
+
+<script>
+  // JavaScript simples para alternar a visibilidade da resposta
+  document.querySelectorAll('.question').forEach(item => {
+    item.addEventListener('click', () => {
+      const answer = item.nextElementSibling;
+      answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
+
