@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Cards nion</title>
+  <style>
+    /* Default Styles (Desktop) */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+    }
+
+    /* Watermark Styles */
+    .nm-watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: grey;
+      z-index: 1000;
+    }
+
+    .nm-spacer {
+      height: 20px; 
+    }
+
+    .nm-container {
+      margin-top: 0 auto;
+      width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .nm-buttons-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nm-button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      flex: 1 1 auto;
+      margin: 5px;
+    }
+
+    .nm-big-button {
+      font-size: 20px;
+    }
+
+    .nm-small-button {
+      font-size: 16px;
+    }
+
+    .nm-card {
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .nm-question-style {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .nm-answer-style {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      text-align: justify;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .nm-button:hover {
+      background-color: #3e8e41;
+    }
+
+    .nm-button:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    /* Responsive Styles for devices smaller than 768px */
+    @media screen and (max-width: 768px) {
+      .nm-container {
+        max-width: 96%;
+        padding: 10px;
+      }
+
+      .nm-card {
+        padding: 20px;
+      }
+
+      .nm-question-style {
+        font-size: 20px;
+      }
+
+      .nm-answer-style {
+        font-size: 18px;
+      }
+
+      .nm-button {
+        padding: 16px 18px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nm-spacer"></div>
+  <div class="nm-container">
+    <!--INSERT_TITLE_HERE-->
+    <div class="nm-card" id="card">
+      <div class="nm-buttons-container">
+        <button class="nm-button" onclick="nextCard()">Next Question</button>
+      </div>
+      <p id="question" class="nm-question-style">
+        Welcome <br><br>
+        <small>Use arrow keys to navigate, double-click to reveal the answer, or click the buttons.</small>
+      </p>
+      <p id="answer" class="nm-answer-style">Click next question to start.</p>
+      <p id="counter" class="nm-counter-style"></p>
+    </div>
+    <div class="nm-buttons-container">
+      <button class="nm-button" id="answerButton" onclick="showAnswer()">Show Answer</button>
+      <div class="nm-button-row">
+        <button class="nm-button" onclick="shuffleCards()">Shuffle Questions</button>
+        <!-- Removed Full Screen button here -->
+        <button class="nm-button custom-button" onclick="markAsMemorized()">Mark as Memorized</button>
+      </div>
+    </div>
+  </div>
+  <div class="nm-spacer"></div>
+
+  <!-- Watermark -->
+  <div class="nm-watermark">
+    Visit <a href="https://www.nionmaron.com" target="_blank">nionmaron.com</a>
+  </div>
+
+  <script>
+    <!--INSERT_CARDS_HERE-->
+
+    var currentCard = 0;
+
+    document.getElementById("answer").style.display = "none";
+    updateCounter();
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function nextCard() {
+      document.getElementById("answer").style.display = "none"; 
+      document.getElementById("answerButton").textContent = "Show Answer";
+      currentCard++;
+      if (currentCard >= cards.length) {
+        shuffle(cards);
+        currentCard = 0;
+      }
+      updateCard();
+    }
+
+    function showAnswer() {
+      var answer = document.getElementById("answer");
+      var answerButton = document.getElementById("answerButton");
+      if (answer.style.display === "none") {
+        answer.style.display = "block";
+        answerButton.textContent = "Hide Answer";
+      } else {
+        answer.style.display = "none";
+        answerButton.textContent = "Show Answer";
+      }
+    }
+
+    function shuffleCards() {
+      shuffle(cards);
+      currentCard = 0;
+      updateCard();
+    }
+
+    function markAsMemorized() {
+      if (cards.length > 0) {
+        cards.splice(currentCard, 1);
+        if (currentCard >= cards.length) {
+          currentCard = 0;
+        }
+        if (cards.length === 0) {
+          document.getElementById("question").innerHTML = "All questions have been memorized! To restart, refresh the page.";
+          document.getElementById("answer").innerHTML = "";
+          document.getElementById("answerButton").style.display = "none";
+          document.getElementById("counter").style.display = "none";
+        } else {
+          updateCard();
+        }
+      }
+    }
+
+    /* Removed toggleFullScreen function here */
+
+    function updateCard() {
+      document.getElementById("question").innerHTML = cards[currentCard].question;
+      document.getElementById("answer").innerHTML = cards[currentCard].answer;
+      updateCounter();
+      if (cards[currentCard].answer.length > 20) {
+        document.getElementById("answer").style.textAlign = "justify";
+      } else {
+        document.getElementById("answer").style.textAlign = "center";
+      }
+      if (currentCard === cards.length - 1) {
+        document.getElementById("question").innerHTML += " (Last question!)";
+      }
+    }
+
+    function updateCounter() {
+      document.getElementById("counter").innerHTML = (cards.length > 0) 
+        ? `Question ${currentCard + 1} of ${cards.length}` 
+        : '';
+    }
+
+    var xDown = null;
+    var yDown = null;
+
+    function handleTouchStart(evt) {
+      const firstTouch = evt.touches[0];
+      xDown = firstTouch.clientX;
+      yDown = firstTouch.clientY;
+    }
+
+    function handleTouchMove(evt) {
+      if (!xDown || !yDown) {
+        return;
+      }
+      var xUp = evt.touches[0].clientX;                                    
+      var yUp = evt.touches[0].clientY;
+
+      var xDiff = xDown - xUp;
+      var yDiff = yDown - yUp;
+
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+          nextCard();
+        } else {
+          previousCard();
+        }
+      }
+      xDown = null;
+      yDown = null;
+    }
+
+    function handleKeyDown(evt) {
+      if (evt.key === "ArrowLeft") {
+        previousCard();
+      } else if (evt.key === "ArrowRight") {
+        nextCard();
+      } else if (evt.key === "ArrowDown") {
+        showAnswer();
+      }
+    }
+
+    function handleDoubleClick() {
+      showAnswer();
+    }
+
+    var cardElement = document.getElementById('card');
+    cardElement.addEventListener('touchstart', handleTouchStart, false);        
+    cardElement.addEventListener('touchmove', handleTouchMove, false);
+    cardElement.addEventListener('dblclick', handleDoubleClick, false);
+
+    document.addEventListener('keydown', handleKeyDown);
+  </script>
+</body>
+</html>
